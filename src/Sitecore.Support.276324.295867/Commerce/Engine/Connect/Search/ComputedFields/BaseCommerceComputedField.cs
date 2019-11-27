@@ -60,38 +60,20 @@ namespace Sitecore.Support.Commerce.Engine.Connect.Search.ComputedFields
         public abstract object ComputeValue(IIndexable itemToIndex);
 
         #region modified part of the code - added DescendsFromOrEquals method
-        //public bool IsItemPartOfValidTemplates(Item item)
-        //{
-        //    Assert.IsNotNull((object)item, "item");
-        //    foreach (ID validTemplate in ValidTemplates)
-        //    {
-        //        if (TemplateManager.GetTemplate(item).DescendsFromOrEquals(validTemplate))
-        //        {
-        //            return true;
-        //        }
-        //    }
-        //    return false;
-        //}
-        #endregion
-
-        #region initial code
-
         public bool IsItemPartOfValidTemplates(Item item)
         {
-            Assert.IsNotNull(item, nameof(item));
-
-            foreach (var templateID in this.ValidTemplates)
+            Assert.IsNotNull((object)item, "item");
+            foreach (ID validTemplate in ValidTemplates)
             {
-                if (item.TemplateID == templateID)
+                if (TemplateManager.GetTemplate(item).DescendsFromOrEquals(validTemplate))
                 {
                     return true;
                 }
             }
-
             return false;
         }
-
         #endregion
+
 
         public Item GetValidatedItem(IIndexable itemToIndex)
         {

@@ -187,51 +187,29 @@ namespace Sitecore.Support.Commerce.Engine.Connect.Search
             return query;
         }
 
-        //#region modified part of the code - added DescendsFromOrEquals method
-        //public bool IsItemCategory(Item item)
-        //{
-        //    return TemplateManager.GetTemplate(item).DescendsFromOrEquals(CommerceConstants.KnownTemplateIds.CommerceCategoryTemplate);
-        //}
-
-        //public bool IsItemProduct(Item item)
-        //{
-        //    return TemplateManager.GetTemplate(item).DescendsFromOrEquals(CommerceConstants.KnownTemplateIds.CommerceProductTemplate);
-        //}
-
-        //public bool IsItemVariant(Item item)
-        //{
-        //    return TemplateManager.GetTemplate(item).DescendsFromOrEquals(CommerceConstants.KnownTemplateIds.CommerceProductVariantTemplate);
-        //}
-
-        //public bool IsItemNavigation(Item item)
-        //{
-        //    return TemplateManager.GetTemplate(item).DescendsFromOrEquals(CommerceConstants.KnownTemplateIds.CommerceNavigationItemTemplate);
-        //}
-
-        //#endregion
-
-        #region initial code
+        #region modified part of the code - added DescendsFromOrEquals method
         public bool IsItemCategory(Item item)
         {
-            return item.TemplateID == CommerceConstants.KnownTemplateIds.CommerceCategoryTemplate;
+            return TemplateManager.GetTemplate(item).DescendsFromOrEquals(CommerceConstants.KnownTemplateIds.CommerceCategoryTemplate);
         }
 
         public bool IsItemProduct(Item item)
         {
-            return item.TemplateID == CommerceConstants.KnownTemplateIds.CommerceProductTemplate;
+            return TemplateManager.GetTemplate(item).DescendsFromOrEquals(CommerceConstants.KnownTemplateIds.CommerceProductTemplate);
         }
 
         public bool IsItemVariant(Item item)
         {
-            return item.TemplateID == CommerceConstants.KnownTemplateIds.CommerceProductVariantTemplate;
+            return TemplateManager.GetTemplate(item).DescendsFromOrEquals(CommerceConstants.KnownTemplateIds.CommerceProductVariantTemplate);
         }
 
         public bool IsItemNavigation(Item item)
         {
-            return item.TemplateID == CommerceConstants.KnownTemplateIds.CommerceNavigationItemTemplate;
+            return TemplateManager.GetTemplate(item).DescendsFromOrEquals(CommerceConstants.KnownTemplateIds.CommerceNavigationItemTemplate);
         }
 
         #endregion
+
 
     }
 }

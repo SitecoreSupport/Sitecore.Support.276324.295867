@@ -195,58 +195,38 @@ namespace Sitecore.Support.Sitecore.Commerce.Engine.Connect.Search.Crawlers
             return null;
         }
 
-        #region initial code
-        protected override bool IsExcludedFromIndex(CommerceCatalogIndexableItem indexable, bool checkLocation = false)
-        {
-            bool isExcluded = base.IsExcludedFromIndex(indexable, checkLocation);
-            if (!isExcluded)
-            {
-                using (new SecurityDisabler())
-                {
-                    var db = Factory.GetDatabase(this.Database);
-                    Item sitecoreItem = db.GetItem(ID.Parse(indexable.Id));
-                    if (sitecoreItem != null)
-                    {
-                        isExcluded = !IndexableTemplateIds.Contains(sitecoreItem.TemplateID);
-                    }
-                }
-            }
-
-            return isExcluded;
-        }
-        #endregion
 
         #region modified part of the code - added DescendsFromOrEquals method
 
-        //protected override bool IsExcludedFromIndex(CommerceCatalogIndexableItem indexable, bool checkLocation = false)
-        //{
-        //    bool flag = base.IsExcludedFromIndex(indexable, checkLocation);
-        //    if (!flag)
-        //    {
-        //        SecurityDisabler val = new SecurityDisabler();
-        //        try
-        //        {
-        //            Item item = Factory.GetDatabase(Database).GetItem(ID.Parse((object)indexable.Id));
-        //            if (item != null)
-        //            {
-        //                foreach (ID indexableTemplateId in IndexableTemplateIds)
-        //                {
-        //                    if (TemplateManager.GetTemplate(item).DescendsFromOrEquals(indexableTemplateId))
-        //                    {
-        //                        return false;
-        //                    }
-        //                }
-        //                return true;
-        //            }
-        //            return flag;
-        //        }
-        //        finally
-        //        {
-        //            ((IDisposable)val)?.Dispose();
-        //        }
-        //    }
-        //    return flag;
-        //}
+        protected override bool IsExcludedFromIndex(CommerceCatalogIndexableItem indexable, bool checkLocation = false)
+        {
+            bool flag = base.IsExcludedFromIndex(indexable, checkLocation);
+            if (!flag)
+            {
+                SecurityDisabler val = new SecurityDisabler();
+                try
+                {
+                    Item item = Factory.GetDatabase(Database).GetItem(ID.Parse((object)indexable.Id));
+                    if (item != null)
+                    {
+                        foreach (ID indexableTemplateId in IndexableTemplateIds)
+                        {
+                            if (TemplateManager.GetTemplate(item).DescendsFromOrEquals(indexableTemplateId))
+                            {
+                                return false;
+                            }
+                        }
+                        return true;
+                    }
+                    return flag;
+                }
+                finally
+                {
+                    ((IDisposable)val)?.Dispose();
+                }
+            }
+            return flag;
+        }
 
         #endregion
 
@@ -257,69 +237,40 @@ namespace Sitecore.Support.Sitecore.Commerce.Engine.Connect.Search.Crawlers
             return this.IsExcludedFromIndex(indexableUniqueId, false);
         }
 
-        #region initial code
+        #region modified part of the code - added DescendsFromOrEquals method
+
         protected override bool IsExcludedFromIndex(IIndexableUniqueId indexableUniqueId, bool checkLocation)
         {
-            bool isExcluded = base.IsExcludedFromIndex(indexableUniqueId, checkLocation);
-            if (!isExcluded)
+            bool flag = base.IsExcludedFromIndex(indexableUniqueId, checkLocation);
+            if (!flag)
             {
-                var sitecoreIndexableId = indexableUniqueId as SitecoreItemUniqueId;
-                if (sitecoreIndexableId != null)
+                SitecoreItemUniqueId val = indexableUniqueId as SitecoreItemUniqueId;
+                if (val != null)
                 {
-                    var sitecoreItem = Data.Database.GetItem(sitecoreIndexableId);
-                    if (sitecoreItem != null)
+                    Item item = Data.Database.GetItem(val);
+                    if (item != null)
                     {
-                        isExcluded = !IndexableTemplateIds.Contains(sitecoreItem.TemplateID);
+                        foreach (ID indexableTemplateId in IndexableTemplateIds)
+                        {
+                            if (TemplateManager.GetTemplate(item).DescendsFromOrEquals(indexableTemplateId))
+                            {
+                                return false;
+                            }
+                        }
+                        flag = true;
                     }
                 }
                 else
                 {
-                    var commerceIndexableItem = indexableUniqueId.Value as CommerceCatalogIndexableItem;
-                    if (commerceIndexableItem != null)
+                    CommerceCatalogIndexableItem commerceCatalogIndexableItem = indexableUniqueId.Value as CommerceCatalogIndexableItem;
+                    if (commerceCatalogIndexableItem != null)
                     {
-                        isExcluded = this.IsExcludedFromIndex(commerceIndexableItem, false);
+                        flag = this.IsExcludedFromIndex(commerceCatalogIndexableItem, false);
                     }
                 }
             }
-
-            return isExcluded;
+            return flag;
         }
-        #endregion
-
-        #region modified part of the code - added DescendsFromOrEquals method
-
-        //protected override bool IsExcludedFromIndex(IIndexableUniqueId indexableUniqueId, bool checkLocation)
-        //{
-        //    bool flag = base.IsExcludedFromIndex(indexableUniqueId, checkLocation);
-        //    if (!flag)
-        //    {
-        //        SitecoreItemUniqueId val = indexableUniqueId as SitecoreItemUniqueId;
-        //        if (val != null)
-        //        {
-        //            Item item = Data.Database.GetItem(val);
-        //            if (item != null)
-        //            {
-        //                foreach (ID indexableTemplateId in IndexableTemplateIds)
-        //                {
-        //                    if (TemplateManager.GetTemplate(item).DescendsFromOrEquals(indexableTemplateId))
-        //                    {
-        //                        return false;
-        //                    }
-        //                }
-        //                flag = true;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            CommerceCatalogIndexableItem commerceCatalogIndexableItem = indexableUniqueId.Value as CommerceCatalogIndexableItem;
-        //            if (commerceCatalogIndexableItem != null)
-        //            {
-        //                flag = this.IsExcludedFromIndex(commerceCatalogIndexableItem, false);
-        //            }
-        //        }
-        //    }
-        //    return flag;
-        //}
 
         #endregion
 
